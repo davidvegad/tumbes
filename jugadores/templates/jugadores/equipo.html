@@ -1,0 +1,385 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'style.css' %}">
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tumbes FC - El Equipo de la Ciudad</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+	<!-- Swiper CSS -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+
+</head>
+<body>
+
+
+    <header>
+        <div class="container">
+            <a href="#" class="logo-link">
+                <img src="{% static 'identity/logo.png' %}" alt="Logo Tumbes FC" width="80">
+                <span>Tumbes FC</span>
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="#about">Nosotros</a></li>
+                    <li><a href="#team">Equipo</a></li>
+                    <li><a href="#matches">Partidos</a></li>
+					<li><a href="#noticias">Noticias</a></li>
+					<li><a href="#sponsors">Patrocinadores</a></li>
+                    <li><a href="#contact">Contacto</a></li>
+					
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+	<!--
+        <section id="hero">
+            <div class="hero-content">
+				<img src="{% static 'identity/logo.png' %}" alt="Escudo Grande Tumbes FC" width="460">
+                <h1>TUMBES FC</h1>
+                <h3>De Tumbes para el mundo. #LosCocodrilos</h3>
+                <a href="#team" class="cta-button">Conoce al Equipo</a>
+            </div>
+        </section>
+	-->
+		<section id="hero" class="hero-swiper">
+			<div class="swiper heroSwiper">
+				<div class="swiper-wrapper">
+				{% for slide in slides %}
+				<div class="swiper-slide">
+					<a href="{{ slide.link }}" target="_blank" style="text-decoration:none; color:inherit;">
+					<img src="{{ slide.imagen.url }}" alt="{{ slide.titulo }}" class="hero-img">
+					<div class="hero-text-overlay">
+						{% if slide.titulo %}<h1>{{ slide.titulo }}</h1>{% endif %}
+						{% if slide.subtitulo %}<p>{{ slide.subtitulo }}</p>{% endif %}
+						{% if slide.boton_texto and slide.link %}
+						<span class="hero-cta">{{ slide.boton_texto }}</span>
+						{% endif %}
+					</div>
+					</a>
+				</div>
+				{% endfor %}
+				</div>
+				<div class="swiper-button-next hero-next"></div>
+				<div class="swiper-button-prev hero-prev"></div>
+				<div class="swiper-pagination hero-pagination"></div>
+			</div>
+		</section>
+
+        <section id="about" class="content-section">
+            <div class="container">
+                <h2>Nuestra Historia</h2>
+                <p>Somos Tumbes FC, un equipo de fútbol amateur nacido de la pasión y la amistad. Fundado en 2024, nuestro objetivo es representar con orgullo a nuestra ciudad en cada cancha que pisamos. Creemos en el juego limpio, el esfuerzo y el trabajo en equipo para alcanzar la victoria.</p>
+            </div>
+        </section>
+		
+
+
+
+		<section id="team" class="content-section">
+			<div class="container">
+				<h2>Nuestro Equipo</h2>
+				<div class="swiper mySwiper">
+					<div class="swiper-wrapper">
+						{% for jugador in jugadores %}
+						<div class="swiper-slide player-card">
+							{% if jugador.foto %}
+								<img src="{{ jugador.foto.url }}" alt="Foto de {{ jugador.nombre }}">
+							{% else %}
+								<img src="{% static 'identity/silueta.png' %}" alt="Sin foto">
+							{% endif %}
+							<h3>{{ jugador.nombre }}</h3>
+							<p>{{ jugador.posicion }}</p>
+						</div>
+						{% endfor %}
+					</div>
+					<!-- Agrega controles de navegación si quieres -->
+					<div class="swiper-button-next"></div>
+					<div class="swiper-button-prev"></div>
+					<div class="swiper-pagination"></div>
+				</div>
+			</div>
+		</section>
+
+		
+      	<section id="matches" class="content-section">
+			<div class="container">
+				<h2>Próximos Partidos</h2>
+				<div class="swiper partidosSwiper">
+				<div class="swiper-wrapper">
+					{% for partido in proximos_partidos %}
+					<div class="swiper-slide partido-card">
+						{% if partido.liga %}
+						<div class="liga-nombre">{{ partido.liga }}</div>
+						{% endif %}
+						<div class="match-teams">
+						<div class="team-info">
+							<img src="{% static 'identity/logo.png' %}" alt="Tumbes FC" class="team-logo">
+							<span class="team-name team-home">Tumbes FC</span>
+						</div>
+						<span class="vs">VS</span>
+						<div class="team-info">
+							{% if partido.logo_visitante %}
+							<img src="{{ partido.logo_visitante.url }}" alt="{{ partido.equipo_rival }}" class="team-logo">
+							{% else %}
+							<img src="{% static 'identity/silueta.png' %}" alt="{{ partido.equipo_rival }}" class="team-logo">
+							{% endif %}
+							<span class="team-name team-away">{{ partido.equipo_rival }}</span>
+						</div>
+						</div>
+						<div class="match-info">
+						<p><strong>Fecha:</strong> {{ partido.fecha|date:"l, d \\d\\e F, Y" }}</p>
+						<p><strong>Hora:</strong> {{ partido.hora|time:"H:i" }}</p>
+						<p><strong>Lugar:</strong> {{ partido.lugar }}</p>
+						</div>
+					</div>
+					{% endfor %}
+					</div>
+					<div class="swiper-button-next partidos-next"></div>
+					<div class="swiper-button-prev partidos-prev"></div>
+					<div class="swiper-pagination partidos-pagination"></div>
+				</div>
+			</div>
+		</section>
+
+
+
+<section id="resultados" class="content-section">
+  <div class="container">
+    <h2>Últimos Resultados</h2>
+    <div class="swiper resultadosSwiper">
+      <div class="swiper-wrapper">
+        {% for partido in resultados %}
+        <div class="swiper-slide resultado-card">
+          <div class="liga-nombre">{{ partido.liga }}</div>
+          <div class="resultado-equipos">
+            <div class="team-info">
+              <img src="{% static 'identity/logo.png' %}" alt="Tumbes FC" class="team-logo">
+              <span class="team-name-ult">Tumbes FC</span>
+            </div>
+            <div class="resultado-marcador">
+              <span>{{ partido.goles_local|default:"0" }}</span>
+              <span class="guion">-</span>
+              <span>{{ partido.goles_visitante|default:"0" }}</span>
+            </div>
+            <div class="team-info">
+              {% if partido.logo_visitante %}
+                <img src="{{ partido.logo_visitante.url }}" alt="{{ partido.equipo_rival }}" class="team-logo">
+              {% else %}
+                <img src="{% static 'identity/silueta.png' %}" alt="{{ partido.equipo_rival }}" class="team-logo">
+              {% endif %}
+              <span class="team-name-ult">{{ partido.equipo_rival }}</span>
+            </div>
+          </div>
+          <div class="resultado-meta">
+            <span class="resultado-fecha">{{ partido.fecha|date:"d M Y" }}</span> |
+            <span class="resultado-lugar">{{ partido.lugar }}</span>
+          </div>
+          {% if partido.goleadores_local or partido.goleadores_visitante %}
+          <div class="resultado-goleadores">
+            {% if partido.goleadores_local %}
+              <span class="goleadores-local"><b>Tumbes FC:</b> {{ partido.goleadores_local }}</span>
+            {% endif %}
+            {% if partido.goleadores_visitante %}
+              <span class="goleadores-visitante"><b>{{ partido.equipo_rival }}:</b> {{ partido.goleadores_visitante }}</span>
+            {% endif %}
+          </div>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+      <div class="swiper-button-next resultados-next"></div>
+      <div class="swiper-button-prev resultados-prev"></div>
+      <div class="swiper-pagination resultados-pagination"></div>
+    </div>
+  </div>
+</section>
+
+
+
+
+		<section id="noticias" class="content-section">
+							<div class="container">
+								<h2>Noticias</h2>
+								<div class="swiper noticiasSwiper">
+								<div class="swiper-wrapper">
+									{% for noticia in noticias %}
+									<div class="swiper-slide noticia-card">
+				<a href="{% url 'noticia_detalle' noticia.pk %}" style="text-decoration:none;color:inherit;">
+					<img src="{{ noticia.imagen.url }}" alt="Imagen noticia" class="noticia-img">
+					<div class="noticia-content">
+					<h3>{{ noticia.titulo }}</h3>
+					<p class="news-date">{{ noticia.fecha|date:"d M Y" }}</p>
+					<p class="news-resumen">{{ noticia.resumen|truncatechars:90 }}</p>
+					</div>
+				</a>
+				</div>
+
+					{% endfor %}
+				</div>
+				<div class="swiper-button-next noticias-next"></div>
+				<div class="swiper-button-prev noticias-prev"></div>
+				<div class="swiper-pagination noticias-pagination"></div>
+				</div>
+			</div>
+		</section>
+	
+
+<section id="sponsors" class="content-section">
+  <div class="container">
+    <h2>Patrocinadores</h2>
+    <div class="sponsors-row sponsors-destacados">
+      {% for sponsor in sponsors_destacados %}
+        <a href="{{ sponsor.url }}" target="_blank" class="sponsor-link sponsor-big">
+          <img src="{{ sponsor.imagen.url }}" alt="{{ sponsor.nombre }}">
+        </a>
+      {% endfor %}
+    </div>
+    <div class="sponsors-row sponsors-normales">
+      {% for sponsor in sponsors_normales %}
+        <a href="{{ sponsor.url }}" target="_blank" class="sponsor-link">
+          <img src="{{ sponsor.imagen.url }}" alt="{{ sponsor.nombre }}">
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+        <section id="contact" class="content-section">
+             <div class="container">
+                <h2>Únete o Contáctanos</h2>
+                <p>¿Interesado en unirte al equipo o jugar un partido amistoso? Escríbenos a nuestras redes sociales.</p>
+				<div class="social-links">
+					<a href="https://www.instagram.com/tumbesfc.2024/" target="_blank" style="display: flex; align-items: center; gap: 8px;">
+						<img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram" width="22" height="22">
+						Instagram
+					</a>
+					<a href="https://www.facebook.com/profile.php?id=61572266071771" target="_blank" style="display: flex; align-items: center; gap: 8px;">
+						<img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook" width="22" height="22">
+						Facebook
+					</a>
+					<a href="https://wa.me/51979191095?text=Hola%20quiero%20información%20sobre%20Tumbes%20FC" target="_blank" style="display: flex; align-items: center; gap: 8px;">
+						<img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" width="22" height="22">
+						WhatsApp
+					</a>
+				</div>
+             </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Tumbes FC. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+<!-- Swiper JS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+</body>
+</html>
+
+<script>
+  // Carrusel de jugadores (si ya lo tienes, omite este)
+  const swiper = new Swiper('.mySwiper', {
+    slidesPerView: 3,
+    spaceBetween: 30,
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
+    },
+    pagination: {
+      el: '.swiper-pagination',
+      clickable: true,
+    },
+    breakpoints: {
+      600: { slidesPerView: 1 },
+      900: { slidesPerView: 2 },
+      1200: { slidesPerView: 3 }
+    }
+  });
+
+  // Carrusel de partidos
+  const partidosSwiper = new Swiper('.partidosSwiper', {
+    slidesPerView: 4,    // Puedes poner 1, 2, 3 según tu preferencia
+    spaceBetween: 10,
+    navigation: {
+      nextEl: '.partidos-next',
+      prevEl: '.partidos-prev',
+    },
+    pagination: {
+      el: '.partidos-pagination',
+      clickable: true,
+    },
+    breakpoints: {
+      600: { slidesPerView: 1 },
+      900: { slidesPerView: 2 },
+      1200: { slidesPerView: 3 }
+    }
+  });
+  
+
+  // Carrusel de noticias
+  const noticiasSwiper = new Swiper('.noticiasSwiper', {
+    slidesPerView: 2,
+    spaceBetween: 32,
+    navigation: {
+      nextEl: '.noticias-next',
+      prevEl: '.noticias-prev',
+    },
+    pagination: {
+      el: '.noticias-pagination',
+      clickable: true,
+    },
+    breakpoints: {
+      600: { slidesPerView: 1 },
+      900: { slidesPerView: 2 },
+      1200: { slidesPerView: 3 }
+    }
+  });
+
+const heroSwiper = new Swiper('.heroSwiper', {
+  slidesPerView: 1,
+  loop: true,
+  autoplay: {
+    delay: 4000,
+    disableOnInteraction: false,
+  },
+  navigation: {
+    nextEl: '.hero-next',
+    prevEl: '.hero-prev',
+  },
+  pagination: {
+    el: '.hero-pagination',
+    clickable: true,
+  },
+  speed: 800
+  // NO pongas effect: "fade"
+});
+
+  const resultadosSwiper = new Swiper('.resultadosSwiper', {
+    slidesPerView: 2,
+    spaceBetween: 32,
+    navigation: {
+      nextEl: '.resultados-next',
+      prevEl: '.resultados-prev',
+    },
+    pagination: {
+      el: '.resultados-pagination',
+      clickable: true,
+    },
+    breakpoints: {
+      600: { slidesPerView: 1 },
+      900: { slidesPerView: 2 },
+      1200: { slidesPerView: 3 }
+    }
+  });
+</script>

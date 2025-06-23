@@ -12,6 +12,7 @@ router.register(r'partidos', PartidoViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', home_views.home, name='home'),  # <-- Agrega esto
     path('jugadores/', include('jugadores.urls')),
     path('partidos/', include('partidos.urls')),
     path('noticias/', include('noticias.urls')),

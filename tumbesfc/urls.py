@@ -5,6 +5,8 @@ from jugadores.views import JugadorViewSet
 from partidos.views import PartidoViewSet
 from django.conf import settings
 from django.conf.urls.static import static
+from home import views as home_views
+
 
 router = routers.DefaultRouter()
 router.register(r'jugadores', JugadorViewSet)
